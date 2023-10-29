@@ -1,0 +1,157 @@
+{% extends "_base.html" %}
+{% block title %}حركات حسابي{% endblock title %}
+{% block header %}حركات حسابي{% endblock header %}
+
+{% block content %}
+<main>
+    <div class="transactions">
+
+        {% for t in transactions %}
+
+        <!-- تعبئة رصيد نقداً -->
+        {% if t.debt == 0 and t.summa > 0 %}
+        <div clas="eachTransaction">
+            <p>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</p>
+            <div>
+                <p>تم إضافة <span style="font-weight: bold;">{{ t.summa }}</span> ليرة الى رصيدكم نقداً. أرسلتها الى {{ t.get_bank_display }}</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 15px;">الرصيد قبل: {{ t.free_balance_before }}</p> <p> الرصيد بعد: {{ t.free_balance_after }}</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 20px;">الدين قبل: {{ t.debt_before }}</p> <p>الدين بعد: {{ t.debt_after }}</p>
+            </div>
+            <div><p>ملاحظة: {{ t.note }}</p></div>
+        </div>
+
+        <!-- تعبئة رصيد بالدين -->
+        {% elif t.debt > 0 and t.summa > 0 and t.debt == t.summa %}
+        <div clas="eachTransaction">
+            <p>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</p>
+            <div>
+                <p>تم إضافة <span style="font-weight: bold;">{{ t.summa }}</span> ليرة الى رصيدكم ديناً. </p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 15px;">الرصيد قبل: {{ t.free_balance_before }}</p> <p> الرصيد بعد: {{ t.free_balance_after }}</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 20px;">الدين قبل: {{ t.debt_before }}</p> <p>الدين بعد: {{ t.debt_after }}</p>
+            </div>
+            <div><p>ملاحظة: {{ t.note }}</p></div>
+        </div>
+
+        <!-- تحصيل من الدين -->
+        {% elif t.debt < 0 and t.summa == 0 %} <div clas="eachTransaction">
+            <div clas="eachTransaction">
+                <p>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</p>
+                <div>
+                    <p>تم تحصيل <span style="font-weight: bold;">{{ t.summa }}</span> ليرة من دينكم. أرسلتها الى {{ t.get_bank_display }}</p>
+                </div>
+                <div style="display: flex;">
+                    <p style="margin-left: 15px;">الرصيد قبل: {{ t.free_balance_before }}</p> <p> الرصيد بعد: {{ t.free_balance_after }}</p>
+                </div>
+                <div style="display: flex;">
+                    <p style="margin-left: 20px;">الدين قبل: {{ t.debt_before }}</p> <p>الدين بعد: {{ t.debt_after }}</p>
+                </div>
+                <div><p>ملاحظة: {{ t.note }}</p></div>
+            </div>
+    <!-- سحب من الرصيد -->
+    {% elif t.debt == 0 and t.summa < 0 %} <div clas="eachTransaction">
+        <div clas="eachTransaction">
+            <p>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</p>
+            <div>
+                <p>تم سحب <span style="font-weight: bold;">{{ t.summa }}</span> ليرة من رصيدكم.</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 15px;">الرصيد قبل: {{ t.free_balance_before }}</p> <p> الرصيد بعد: {{ t.free_balance_after }}</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 20px;">الدين قبل: {{ t.debt_before }}</p> <p>الدين بعد: {{ t.debt_after }}</p>
+            </div>
+            <div><p>ملاحظة: {{ t.note }}</p></div>
+        </div>
+
+        <!-- إضافة على الدين -->
+        {% elif t.debt > 0 and t.summa == 0 %}
+        <div clas="eachTransaction">
+            <p>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</p>
+            <div>
+                <p>تم إضافة <span style="font-weight: bold;">{{ t.summa }}</span> ليرة دينكم.</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 15px;">الرصيد قبل: {{ t.free_balance_before }}</p> <p> الرصيد بعد: {{ t.free_balance_after }}</p>
+            </div>
+            <div style="display: flex;">
+                <p style="margin-left: 20px;">الدين قبل: {{ t.debt_before }}</p> <p>الدين بعد: {{ t.debt_after }}</p>
+            </div>
+            <div><p>ملاحظة: {{ t.note }}</p></div>
+        </div>
+
+        {% endif %}
+        {% endfor %}
+
+        <!-- <table>
+            <thead class="transactionsHeader">
+                <tr>
+                    <th>رقم الطلب</th>
+                    <th>البنك</th>
+                    <th>المبلغ</th>
+                    <th>دين</th>
+                    <th>الملاحظة</th>
+                    <th>التاريخ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t.pk }}</td>
+                    <td>{{ t.get_bank_display }}</td>
+                    <td>{{ t.summa }}</td>
+                    <td>{{ t.debt }}</td>
+                    <td>{{ t.note }}</td>
+                    <td>{{ t.date|date:"Y-m-d" }} {{ t.date|date:"g:i A" }}</td>
+
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> -->
+
+
+
+        <div class="pagination">
+            <ul class="step-links">
+                {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-chevron-left"
+                            aria-hidden="true"></i></a></li>
+                {% else %}
+                <li class="disabled"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+                {% endif %}
+
+                {% if page_obj.number|add:'-4' > 1 %}
+                <li><a href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %} <li><a href="?page={{ i }}">{{ i
+                        }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+                    <li><a href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+                    {% endif %}
+
+                    {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}"><i class="fa fa-chevron-right"
+                                aria-hidden="true"></i></a></li>
+                    {% else %}
+                    <li class="disabled"><span><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+                    {% endif %}
+            </ul>
+        </div>
+        </div>
+</main>
+{% endblock content %}
